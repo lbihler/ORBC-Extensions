@@ -1,0 +1,25 @@
+{
+  "name": "palletisation",
+  "version": "1.0.0",
+  "description": "Extension to manage paletisation plans in Oracle Retail Brand Compliance",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lbihler/ORBC-Extensions.git"
+  },
+  "keywords": [
+    "ORBC"
+  ],
+  "author": "Laurent Bihler",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lbihler/ORBC-Extensions/issues"
+  },
+  "homepage": "https://github.com/lbihler/ORBC-Extensions#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
