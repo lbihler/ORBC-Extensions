@@ -15,7 +15,7 @@ const promisesParser = util.promisify(xml2jsParser);
 const path = require('path');
 
 let date = new Date();
-var logFileName = params.errDir + '/' + path.parse(module.filename).base + '.' + date.getTime();
+var logFileName = params.errDir + '/' + path.parse(module.filename).base + '.' + date.getTime() + '.log';
 
 // item is a JSON Object corresponding to the SPEC fro, the Specs list
 async function recordSpec(item, onSuccess, onError) {
@@ -118,7 +118,7 @@ async function dbSodaInsert(docJson, onSuccess, onError) {
     }
 }
 
-async function getSpecList(onSuccess, onError) {
+async function getSpecList(offset, pageSize, onSuccess, onError) {
     const instance = axios.create({
         url: params.orbcParameters.specSessionUrl,
         timeout: 100000,
@@ -127,12 +127,18 @@ async function getSpecList(onSuccess, onError) {
             Authorization: 'Basic ' + params.orbcParameters.token
         }
     });
+    let url = params.orbcParameters.specSessionUrl + '/?offset=' + offset + '&pageSize=' + pageSize;
 
-    let specListJson = await instance.get(params.orbcParameters.specSessionUrl).then(async docXML => {
+    let specListJson = await instance.get(url).then(async docXML => {
             let specListJson = await promisesParser(docXML.data, { tagNameProcessors: [stripNS] }, );
             return specListJson;
         }).then(specListJson => {
-            fs.writeFile(params.specListFile, JSON.stringify(specListJson), (errWrite) => { if (errWrite) onError('Error writing specs list', errWrite); });
+            fs.writeFile(params.specListFile + offset + '.json', JSON.stringify(specListJson), (errWrite) => { if (errWrite) onError('Error writing specs list', errWrite); });
+            return specListJson;
+        }).then(async specListJson => {
+            if ((offset + pageSize) < specListJson.ProductSpecificationLinkList.totalRecords) {
+                await getSpecList(offset + pageSize, pageSize, onSuccess, onError);
+            }
             return specListJson;
         })
         .catch((err) => {
@@ -156,7 +162,7 @@ async function logError(msg, err) {
     let date = new Date();
 
     if (logFileName) {
-        fs.appendFile(logFileName, 'ERROR at ' + date.getTime() + '\n', (err) => { if (err) console.error(err) });
+        fs.appendFile(logFileName, '\nERROR at ' + date.getTime() + '\n', (err) => { if (err) console.error(err) });
         if (msg) fs.appendFile(logFileName, 'MSG: ' + msg + '\n', (errWrite) => { if (errWrite) console.error(errWrite) });
         if (err) fs.appendFile(logFileName, 'ERR: ' + err + '\n', (errWrite) => { if (errWrite) console.error(errWrite) });
     } else {
@@ -165,4 +171,4 @@ async function logError(msg, err) {
     }
 };
 
-dbSodaClean(() => { getSpecList(sync2soda, logError) }, logError);
+dbSodaClean(() => { getSpecList(0, params.orbcParameters.pageSize, sync2soda, logError) }, logError);

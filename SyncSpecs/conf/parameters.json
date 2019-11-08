@@ -1,7 +1,8 @@
 {
     "orbcParameters": {
         "specSessionUrl": "http://llg00hyl.uk.oracle.com:10001/orbcprod/services/rest/specification",
-        "token": "QVBJU1BFQzpPcmFjbGUxMjMh"
+        "token": "QVBJU1BFQzpPcmFjbGUxMjMh",
+        "pageSize": 30
     },
     "dbConnection": {
         "dbUser": "ADMIN",
@@ -9,7 +10,7 @@
         "dbConnectString": "atplab_high"
     },
     "logLevel": 2,
-    "specListFile": "./json/specList.json",
+    "specListFile": "./json/specList",
     "logDir": "./logs",
     "errDir": "./logs",
     "jsonDir": "./json"
