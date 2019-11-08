@@ -1,9 +1,0 @@
-MSG: Error during spec API call
-ERROR at 1573174863209
-ERR: Error: Request failed with status code 417
-ERROR at 1573174885093
-MSG: Error during spec API call
-ERR: Error: Request failed with status code 417
-ERROR at 1573174901706
-MSG: Error during spec API call
-ERR: Error: Request failed with status code 417
