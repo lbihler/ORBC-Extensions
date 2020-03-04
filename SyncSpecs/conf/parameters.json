@@ -5,8 +5,8 @@
         "pageSize": 30
     },
     "dbConnection": {
-        "dbUser": "ADMIN",
-        "dbPassword": "WElcome_123#",
+        "dbUser": "ORBC_EXT",
+        "dbPassword": "7MBE2wYwfvZJcvg",
         "dbConnectString": "atplab_high"
     },
     "logLevel": 2,

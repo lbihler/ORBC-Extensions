@@ -1,7 +1,7 @@
 "use Strict"
 
 // Lading parameters
-const params = require('./conf/parameters_orbcext.json');
+const params = require('./conf/parameters.json');
 
 // include node modules
 const oracledb = require('oracledb');
