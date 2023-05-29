@@ -1,0 +1,38 @@
+{
+
+  "name": "Demo",
+
+  "version": "1.0.0",
+
+  "private": true,
+
+  "description": "Demo app",
+
+  "keywords": [
+
+    "myapp"
+
+  ],
+
+  "author": "You",
+
+  "license": "MIT",
+
+  "dependencies": {
+
+    "axios": "^1.3.4",
+
+    "axios-response-logger": "^0.1.0",
+
+    "http-request": "^0.7.0",
+
+    "https": "^1.0.0",
+
+    "node-crypto": "^1.0.0",
+
+    "xml2js": "^0.4.23"
+
+  }
+
+}
+

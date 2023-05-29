@@ -1,17 +1,19 @@
 {
     "orbcParameters": {
-        "specSessionUrl": "http://llg00hyl.uk.oracle.com:10001/orbcprod/services/rest/specification",
-        "token": "QVBJU1BFQzpPcmFjbGUxMjMh",
+        "specSessionUrl": "https://temp.orbc.retail.us-phoenix-1.ocs.oc-test.com/rgbu-orbc-smg-stg121-bccs/orbcprod/services/rest/specification",
+        "token": "QVBJU1BFQzpQQExiaEt0YTdXNXc=",
         "pageSize": 30
-    },
-    "dbConnection": {
-        "dbUser": "ORBC_EXT",
-        "dbPassword": "7MBE2wYwfvZJcvg",
-        "dbConnectString": "atplab_high"
     },
     "logLevel": 2,
     "specListFile": "./json/specList",
     "logDir": "./logs",
     "errDir": "./logs",
-    "jsonDir": "./json"
+    "jsonDir": "./json",
+    "ordsParameters": {
+        "idcsUrl": "https://idcs-3eebf6dbc8fa4e4ea789284573e9304e.identity.preprod.oraclecloud.com/oauth2/v1/token",
+        "clientId": "RGBU_MFCS_ODEMO99_APPID",
+        "clientSecret": "de1223ca-827a-419b-a460-b1cf2ed42e05",
+        "oauthScope": "rgbu:merch:MFCS-ODEMO99",
+        "pageSize": 30
+    }
 }

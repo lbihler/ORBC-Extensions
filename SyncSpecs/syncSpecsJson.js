@@ -4,7 +4,7 @@
 const params = require('./conf/parameters.json');
 
 // include node modules
-const oracledb = require('oracledb');
+// const oracledb = require('oracledb');
 const axios = require('axios');
 const xml2jsParser = require('xml2js').parseString;
 const stripNS = require('xml2js').processors.stripPrefix;
@@ -16,17 +16,22 @@ const path = require('path');
 
 let date = new Date();
 var logFileName = params.errDir + '/' + path.parse(module.filename).base + '.' + date.getTime() + '.log';
-
+// Only set on test environments
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 // item is a JSON Object corresponding to the SPEC fro, the Specs list
 async function recordSpec(item, onSuccess, onError) {
     //let result = await axios.get(item.recordLink[0], {
 
     const instance = await axios.create({
         baseURL: item.recordLink[0],
-        withCredentials: true,
+        //withCredentials: true,
         headers: {
-            Authorization: 'Basic ' + params.orbcParameters.token
-        },
+            'Cache-Control': 'no-cache',
+            'Content-type': 'application/json',
+            'Connection': 'keep-alive',
+            //'Authorization': 'Basic QVBJU1BFQzpPcmFjbGUxMjM0NSE='
+            'Authorization': 'Basic ' + params.orbcParameters.token
+            }, 
     });
     await instance.get('/').then(async(response) => {
         // docXML is the list of specifications
@@ -88,7 +93,7 @@ async function dbSodaClean(onSuccess, onError) {
 // SODA operations - inserts a JSON object into Collection
 async function dbSodaInsert(docJson, onSuccess, onError) {
     // SODA parameters
-    oracledb.autoCommit = true;
+/*    oracledb.autoCommit = true;
     let connection;
     try {
         connection = await oracledb.getConnection({
@@ -116,6 +121,7 @@ async function dbSodaInsert(docJson, onSuccess, onError) {
             }
         }
     }
+    */
 }
 
 async function getSpecList(offset, pageSize, onSuccess, onError) {
@@ -133,6 +139,7 @@ async function getSpecList(offset, pageSize, onSuccess, onError) {
             let specListJson = await promisesParser(docXML.data, { tagNameProcessors: [stripNS] }, );
             return specListJson;
         }).then(specListJson => {
+            console.log('retrieved spec');
             fs.writeFile(params.specListFile + offset + '.json', JSON.stringify(specListJson), (errWrite) => { if (errWrite) onError('Error writing specs list', errWrite); });
             return specListJson;
         }).then(async specListJson => {
@@ -150,6 +157,7 @@ async function getSpecList(offset, pageSize, onSuccess, onError) {
 
 async function sync2soda(specListJson) {
     //await Promise.all(specListJson.ProductSpecificationLinkList.entries.map(recordSpec.bind(null, instance)));
+
     try {
         for (const item of specListJson.ProductSpecificationLinkList.entries) await recordSpec(item, dbSodaInsert, logError);
     } catch (err) {
@@ -171,4 +179,5 @@ async function logError(msg, err) {
     }
 };
 
-dbSodaClean(() => { getSpecList(0, params.orbcParameters.pageSize, sync2soda, logError) }, logError);
+//dbSodaClean(() => { getSpecList(0, params.orbcParameters.pageSize, sync2soda, logError) }, logError);
+getSpecList(0, params.orbcParameters.pageSize, sync2soda, logError);
